@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/license-GPL-blue.svg)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-ConnectionsTUI is a terminal-based implementation of the popular game (by New York Times), written in Rust and using the Ratatui crate to create the Terminal User Interface.
+ConnectionsTUI is a terminal-based implementation of the popular game (by New York Times), written in Rust and using the [Ratatui crate](https://github.com/ratatui-org/ratatui) to create the Terminal User Interface.
 
 ## Prerequisites
 
