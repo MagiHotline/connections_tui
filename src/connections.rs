@@ -1,5 +1,7 @@
 use serde::Deserialize;
+use core::array::from_fn;
 
+#[derive(Debug)]
 pub enum Difficulty {
     STRAIGHTFORWARD,
     MEDIUM,
@@ -26,44 +28,63 @@ pub struct Card {
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Category {
-    title: String,
-    cards: [Card; 4],
+    pub title: String,
+    pub cards: [Card; 4],
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Connections {
-    categories: [Category; 4],
+    pub id: u32,
+    pub print_date: String,
+    pub editor: String,
+    pub categories: [Category; 4],
 }
 
 impl Connections {
     pub fn new() -> Connections {
         Connections {
-            categories: core::array::from_fn(|_| Category {
+            id: 0,
+            print_date: String::from(""),
+            editor: String::from(""),
+            categories: from_fn(|_| Category {
                 title: (String::from("")),
-                cards: core::array::from_fn(|_| Card {
+                cards: from_fn(|_| Card {
                     content: String::from(""),
                     position: 0,
                 }),
             }),
         }
     }
-}
 
-impl Default for Connections {
-    fn default() -> Self {
-        Self::new()
+    pub fn with_difficulties(self) -> Vec<(Category, Difficulty)> {
+        let difficulties = [
+            Difficulty::STRAIGHTFORWARD,
+            Difficulty::MEDIUM,
+            Difficulty::HARD,
+            Difficulty::TRICKY,
+        ];
+
+        self.categories.into_iter().zip(difficulties).collect()
     }
 }
 
 pub struct ConnectionsGrid {
-    pub grid: Connections,
+    pub grid: [[Card; 4]; 4],
     pub selected_cell: (usize, usize),
 }
 
 impl Default for ConnectionsGrid {
     fn default() -> Self {
         Self {
-            grid: Connections::new(),
+            grid: from_fn(|_|
+                from_fn(|_|
+                    Card
+                    {
+                        content: String::from(""),
+                        position:0
+                    }
+                )
+            ),
             selected_cell: (0, 0),
         }
     }
@@ -79,7 +100,7 @@ pub async fn get_daily_puzzle() -> std::result::Result<Connections, reqwest::Err
 
     let response = reqwest::get(&url).await?.text().await?;
 
-    let connections_data =
+    let connections_data: Connections =
         serde_json::from_str(&response).expect("Failed to convert json to Connections");
 
     Ok(connections_data)
