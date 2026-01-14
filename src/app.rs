@@ -10,6 +10,7 @@ use tui_big_text::{BigText, PixelSize};
 /// Struct for the main data for the App.
 pub struct App {
     solution: Connections,
+    mistakes: u8,
     has_won: bool,
     content: ConnectionsGrid,
 }
@@ -18,6 +19,7 @@ impl Default for App {
     fn default() -> Self {
         Self {
             solution: Connections::new(),
+            mistakes: 0,
             has_won: false,
             content: ConnectionsGrid {
                 grid: from_fn(|_|
@@ -45,7 +47,7 @@ pub struct Grid {
 impl Default for Grid {
     fn default() -> Self {
         Self {
-            cell_size: 4,
+            cell_size: 3,
             cols: 4,
             rows: 4,
         }
@@ -101,6 +103,9 @@ impl App {
             .await
             .expect("FAILED TO GET DAILY PUZZLE");
 
+        // Get the content of the grid from the solution
+        self.content.grid = self.solution.clone().categories.map(|c| c.cards);
+
         loop {
             terminal.draw(|frame| self.draw(frame))?;
 
@@ -130,7 +135,7 @@ impl App {
             Constraint::Fill(1),
             Constraint::Length(5),
             Constraint::Min((grid.cell_size as u16 + 2) * 6),
-            Constraint::Length(2),
+            Constraint::Length(1),
             Constraint::Length(3),
             Constraint::Fill(1),
         ])

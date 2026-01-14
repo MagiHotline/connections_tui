@@ -34,7 +34,7 @@ pub struct Category {
     pub cards: [Card; 4],
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Connections {
     pub id: u32,
     pub print_date: String,
