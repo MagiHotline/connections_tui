@@ -125,7 +125,7 @@ impl App {
 
         let horizontal = &Layout::horizontal([
             Constraint::Fill(1),
-            Constraint::Max((grid.cell_size as u16 + 15) * 4),
+            Constraint::Max((grid.cell_size as u16 + 11) * 4),
             Constraint::Fill(1),
         ]);
 
@@ -134,7 +134,7 @@ impl App {
         let inner_layout = &Layout::vertical([
             Constraint::Fill(1),
             Constraint::Length(5),
-            Constraint::Min((grid.cell_size as u16 + 2) * 6),
+            Constraint::Min((grid.cell_size as u16 + 2) * 4),
             Constraint::Length(1),
             Constraint::Length(3),
             Constraint::Fill(1),
